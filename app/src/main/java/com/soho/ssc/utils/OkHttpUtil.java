@@ -3,8 +3,11 @@ package com.soho.ssc.utils;
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.soho.ssc.MyApplication;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -112,12 +115,14 @@ public class OkHttpUtil {
                 .get()
                 .build();
         onStart(callback);
+        L.e("url:"+url);
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
                     if (response.isSuccessful()) {
                         String msg = response.body().string();
+                        L.e("data:"+ msg);
                         CommonResponse jsonBean = new Gson().fromJson(msg,CommonResponse.class);
                         if(String.valueOf(jsonBean.getCode()).startsWith("4")) {
                             onError(callback,msg);
@@ -131,7 +136,10 @@ public class OkHttpUtil {
                     }
                 }catch (IllegalStateException e){
                     e.printStackTrace();
+                }catch (JsonSyntaxException e){
+                    e.printStackTrace();
                 }
+
             }
             @Override
             public void onFailure(Call call, IOException e) {

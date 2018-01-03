@@ -4,34 +4,69 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#fff"
-    android:paddingLeft="10dp"
-    android:paddingTop="5dp">
-
-    <TextView
-        android:id="@+id/text_name"
+    android:background="@drawable/bg_radius_shape"
+    android:layout_marginLeft="14dp"
+    android:layout_marginRight="14dp"
+    android:layout_marginTop="10dp"
+    android:paddingTop="10dp"
+    >
+    <ImageView
+        android:id="@+id/img_flag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="sadfdsfsa"
-        android:textColor="#ff0000"
-        android:textSize="13sp" />
-
-    <TextView
-        android:id="@+id/tv_time"
+        android:layout_margin="10dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/lottery_fucai3d"
+        android:scaleType="centerCrop"
+        android:visibility="gone"/>
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/text_name"
-        android:text="第2017123期开奖结果"
-        android:textSize="13sp"
-        android:textColor="#222222"/>
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/img_flag"
+        android:layout_margin="10dp"
+        android:layout_centerInParent="true"
+        >
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="sadfdsfsa"
+            android:textColor="#ff4129"
+            android:textSize="13sp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_num"
-        android:layout_below="@+id/text_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/text_name"
+            android:text="第2017123期开奖结果"
+            android:textSize="13sp"
+            android:textColor="#222222"/>
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_num"
+            android:layout_below="@+id/text_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:overScrollMode="never"
+            android:focusableInTouchMode="false"
+            android:focusable="false"/>
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recycler_num"
+            android:text="开奖时间："
+            android:textSize="12sp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="15dp"
+            />
+
+    </RelativeLayout>
+
+
 </RelativeLayout>

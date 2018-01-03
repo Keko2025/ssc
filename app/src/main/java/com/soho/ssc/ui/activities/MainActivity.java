@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.soho.ssc.R;
 import com.soho.ssc.ui.fragment.FindFragment;
 import com.soho.ssc.ui.fragment.HomeFragment;
-import com.soho.ssc.ui.fragment.MineFragment;
+import com.soho.ssc.ui.fragment.SetFragment;
 import com.soho.ssc.ui.impl.Frag2ActivImp;
 import com.soho.ssc.ui.view.FragmentTabHost;
 import com.soho.ssc.utils.L;
@@ -28,14 +28,14 @@ public class MainActivity extends AppCompatActivity implements Frag2ActivImp {
 
     private String texts[] = {"首页", "发现", "我的"};
     private int imageButton[] = { R.drawable.tab_main, R.drawable.tab_find, R.drawable.tab_mine };
-    private Class fragmentArray[] = { HomeFragment.class, FindFragment.class,MineFragment.class };
+    private Class fragmentArray[] = { HomeFragment.class, FindFragment.class,SetFragment.class };
 
     private int previous = 0;
     private int current = 0;
 
     private HomeFragment homgFragment;
     private FindFragment findFragment;
-    private MineFragment mineFragment;
+    private SetFragment mineFragment;
     long waitTime = 2000;
     long touchTime = 0;
 
@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity implements Frag2ActivImp {
             homgFragment = (HomeFragment) fragment;
         }else if (fragment instanceof FindFragment){
             findFragment = (FindFragment) fragment;
-        }else if (fragment instanceof MineFragment){
-            mineFragment = (MineFragment) fragment;
+        }else if (fragment instanceof SetFragment){
+            mineFragment = (SetFragment) fragment;
         }
     }
 
@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements Frag2ActivImp {
         tabhost.setCurrentTab(current);
 
         initEvent();
+
+
     }
 
     private void initEvent() {

@@ -1,11 +1,14 @@
 package com.soho.ssc;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.multidex.MultiDex;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.tencent.bugly.Bugly;
+import com.tencent.bugly.beta.Beta;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -17,10 +20,12 @@ import cn.jpush.android.api.JPushInterface;
 
 public class MyApplication extends Application {
 
+    private static Context context;
+
     @Override
     public void onCreate() {
         super.onCreate();
-
+        context = getApplicationContext();
         initFresco();
 
         JPushInterface.setDebugMode(false);
@@ -35,6 +40,18 @@ public class MyApplication extends Application {
                 .setBitmapsConfig(Bitmap.Config.RGB_565)
                 .build();
         Fresco.initialize(this, config);
+    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
+
+        //安装tinker
+        Beta.installTinker();
+    }
+
+    public static Context getContext() {
+        return context;
     }
 
 }

@@ -39,8 +39,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activities.MainActivity"/>
-
+        <activity android:name=".ui.activities.MainActivity"
+            android:launchMode="singleTask"
+            />
+        <activity android:name=".ui.activities.WebViewActivity"/>
+        <activity android:name=".ui.activities.DetailActivity"/>
+        <activity android:name=".ui.activities.SetActivity"/>
+        <!--<service android:name="receive.MyReceiver"-->
+            <!--android:process=":push"/>-->
+        <receiver android:name="receive.NotificationReceiver"/>
+        <receiver android:name="receive.ShowNotificationReceiver"/>
 
 
         <!--bugly热更新-->

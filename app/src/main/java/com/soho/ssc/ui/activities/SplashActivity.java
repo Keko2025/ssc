@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -15,12 +16,20 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 
+import com.google.gson.Gson;
 import com.soho.ssc.R;
+import com.soho.ssc.model.DataBean;
+import com.soho.ssc.model.ResultBean;
+import com.soho.ssc.model.SscBean;
+import com.soho.ssc.utils.L;
+import com.soho.ssc.utils.OkHttpUtil;
 
 import java.lang.reflect.Method;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.R.attr.data;
 
 
 /**
@@ -48,7 +57,33 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         startAnim();
+        initData();
     }
+
+    private void initData() {
+        new OkHttpUtil().get("http://vipapp.01appddd.com/Lottery_server/get_init_data.php?"+"type=android&&appid=20180101",
+                new OkHttpUtil.HttpCallback() {
+                    @Override
+                    public void onSuccess(String data) {
+                        L.e("data:"+data);
+                        SscBean bean = new Gson().fromJson(data,SscBean.class);
+                        String result = new String(Base64.decode(bean.getData().getBytes(),Base64.DEFAULT));
+                        L.e("entoStr:" + result);
+                        if(!result.isEmpty()){
+                            DataBean dataBean = new Gson().fromJson(result,DataBean.class);
+                            if(dataBean.getShow_url().endsWith("1")){
+                                startActivity(new Intent(SplashActivity.this,WebViewActivity.class).putExtra("url",dataBean.getUrl()));
+                            }
+                        }
+                    }
+                    @Override
+                    public void onError(String msg) {
+                        super.onError(msg);
+                        L.e("data:"+data);
+                    }
+                });
+    }
+
     @Override
     protected void onStart() {
         //调用配置
@@ -104,7 +139,7 @@ public class SplashActivity extends AppCompatActivity {
     }
     private void startAnim() {
         AlphaAnimation alpha = new AlphaAnimation(0, 1);// 渐变动画,从完全透明到完全不透明
-        alpha.setDuration(1500); // 持续时间 2 秒
+        alpha.setDuration(200); // 持续时间 2 秒
         alpha.setFillAfter(true);// 动画结束后，保持动画状态
 
         // 设置动画监听器
@@ -118,6 +153,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onAnimationEnd(Animation animation) {
                 // 跳转到下一个页面
                 startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                finish();
             }
         });
         // 启动动画

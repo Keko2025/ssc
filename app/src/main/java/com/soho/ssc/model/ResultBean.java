@@ -1,5 +1,6 @@
 package com.soho.ssc.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * @data 2018/1/1.
  */
 
-public class ResultBean {
+public class ResultBean implements Serializable{
 
     /**
      * code : pl3
@@ -53,7 +54,7 @@ public class ResultBean {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * expect : 2017358
          * opencode : 9,5,1

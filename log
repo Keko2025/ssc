@@ -1,0 +1,70 @@
+
+Problem description Right now, the API is returning various image size presets for pretty much everything. Backend is making the choice of the image size and it's not pretty clear for frontend to know what they're receiving. Plus, most of the time, backend sends "original_photo". Which means, a picture with a size that's actually random. Now, if we want to display our app on a screen that's 750px large (iphone 8), we don't need to load a picture that's 4000px large. It's a big waste of bandwidth for the user, it can affect the user experience by slowing the application and it can increase our costs (CDN). Finally, an app can be displayed on various screen sizes, from iphone 1 to 8 and ipad. We shouldn't load huge pictures for ipad case on iphone 1 or small pictures for iphone 1 on ipad. Solution Our images are stored on Qiniu. Qiniu, like many other image CDNs, provides a simple way to resize images on the fly. The solution then is to leave the responsibility of frontend to chose which size is the best one when we need to display the image. To make that work, we need to change data format in API (and convert at backend level) New data format old format { "product": { "thumb_photo_url": "http://images.cdn.change.so/photo-c28fedd39ff3a721c5738463e52301be.png?imageView/2/w/640" } } new format { "product": { "photo": { "provider": "qiniu", "id": "photo-c28fedd39ff3a721c5738463e52301be", "ext": "png" } } } In addition, frontend will carry config + adapter for each provider to be able to reconstruct the url config example { "image_providers": { "qiniu": { "host": "images.cdn.change.so" } } }
+1680/5000
+
+问题描述
+
+现在，API正在为几乎所有的东西返回各种图像大小的预设值。后端可以选择图像大小，而前端不太清楚知道它们接收的是什么。而且，大多数时候，后端发送“original_photo”。也就是说，一幅有大小的图片其实是随机的。
+
+现在，如果我们想在一个750px的屏幕上显示我们的应用程序(iphone 8)，我们不需要加载一个4000px的图片。对于用户来说，这是一个很大的带宽浪费，它可以通过减慢应用程序的速度来影响用户体验，并且可以增加我们的成本(CDN)。
+
+最后，一个应用程序可以显示在各种屏幕尺寸上，从iphone 1到8和ipad。我们不应该在ipad上为iphone 1或iphone 1的小图片加载巨大的图片。
+
+解决方案
+
+我们的图像存储在Qiniu上。和许多其他的图像CDNs一样，Qiniu提供了一种简单的方法来调整图像的大小。
+
+解决方案是在我们需要显示图像时，让前端的责任选择哪个大小是最好的。为了使其工作，我们需要更改API中的数据格式(并在后端级别转换)
+
+新数据格式
+
+旧格式
+
+{
+
+"产品":{
+
+“thumb_photo_url”:“http://images.cdn.change.so/photo-c28fedd39ff3a721c5738463e52301be.png?imageView/2/w/640”
+
+}
+
+}
+
+新格式
+
+{
+
+"产品":{
+
+“照片”:{
+
+“提供者”:“qiniu”,
+
+“id”:“photo-c28fedd39ff3a721c5738463e52301be”,
+
+:“ext png”
+
+}
+
+}
+
+}
+
+此外，frontend将为每个提供者携带config +适配器，以便能够重构url
+
+配置示例
+
+{
+
+" image_providers ":{
+
+" qiniu ":{
+
+“主机”:“images.cdn.change.so”
+
+}
+
+}
+
+}
+
