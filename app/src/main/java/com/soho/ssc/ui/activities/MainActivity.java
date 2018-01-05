@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements Frag2ActivImp {
 
     private String texts[] = {"首页", "发现", "我的"};
     private int imageButton[] = { R.drawable.tab_main, R.drawable.tab_find, R.drawable.tab_mine };
-    private Class fragmentArray[] = { HomeFragment.class, FindFragment.class,SetFragment.class };
+    private Class fragmentArray[] = { FindFragment.class,HomeFragment.class, SetFragment.class };
 
     private int previous = 0;
     private int current = 0;
@@ -68,10 +68,7 @@ public class MainActivity extends AppCompatActivity implements Frag2ActivImp {
         tabhost.setCurrentTab(current);
 
         initEvent();
-
-
     }
-
     private void initEvent() {
         tabhost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override

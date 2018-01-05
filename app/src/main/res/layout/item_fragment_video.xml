@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff">
+    <RelativeLayout
+        android:id="@+id/id_top_tab"
+        android:layout_width="match_parent"
+        android:layout_height="202dp"
+        android:layout_alignParentTop="true"
+        >
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/video_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            fresco:actualImageScaleType="centerCrop"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_channel_info"
+        style="@style/style_common_width_height_mw"
+        android:orientation="vertical"
+        android:layout_below="@+id/id_top_tab"
+        >
+
+        <TextView
+            android:id="@+id/video_name_tv"
+            style="@style/style_common_width_height_ww"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="1dp"
+            android:text=""
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:textSize="14sp"
+            android:maxLines="2"
+            android:lineSpacingMultiplier="1.2"
+            android:lineSpacingExtra="1dp"/>
+
+        <TextView
+            android:id="@+id/video_time_tv"
+            style="@style/style_common_width_height_ww"
+            android:layout_below="@+id/video_name_tv"
+            android:layout_marginLeft="14dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="@dimen/common_5"
+            android:textColor="#585858"
+            android:textSize="11sp"
+            android:text=""
+            />
+        <!--42033次播放 . 30分钟前-->
+    </RelativeLayout>
+
+</RelativeLayout>

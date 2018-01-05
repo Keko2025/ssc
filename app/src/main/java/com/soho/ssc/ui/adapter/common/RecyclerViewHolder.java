@@ -81,10 +81,42 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
         view.setOnClickListener(listener);
         return this;
     }
+    public RecyclerViewHolder setVideoFrescoImg(int viewId, Uri uri){
+        SimpleDraweeView simpleDraweeView = getView(viewId);
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
+                .setResizeOptions(new ResizeOptions(DisplayUtil.dp2px(mContext.getApplicationContext(),360),DisplayUtil.dp2px(mContext.getApplicationContext(),202)))
+                .build();
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setImageRequest(request)
+                .setOldController(simpleDraweeView.getController())
+                .build();
+        simpleDraweeView.setController(controller);
+        return this;
+    }
+
     public RecyclerViewHolder setSmallFrescoImg(int viewId, Uri uri){
         SimpleDraweeView simpleDraweeView = getView(viewId);
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
                 .setResizeOptions(new ResizeOptions(DisplayUtil.dp2px(mContext.getApplicationContext(),30),DisplayUtil.dp2px(mContext.getApplicationContext(),30)))
+                .build();
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setImageRequest(request)
+                .setOldController(simpleDraweeView.getController())
+                .build();
+        simpleDraweeView.setController(controller);
+        return this;
+    }
+
+    /**
+     * 新闻图片
+     * @param viewId
+     * @param uri
+     * @return
+     */
+    public RecyclerViewHolder setNewsFrescoImg(int viewId, Uri uri){
+        SimpleDraweeView simpleDraweeView = getView(viewId);
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
+                .setResizeOptions(new ResizeOptions(DisplayUtil.dp2px(mContext.getApplicationContext(),120),DisplayUtil.dp2px(mContext.getApplicationContext(),70)))
                 .build();
         DraweeController controller = Fresco.newDraweeControllerBuilder()
                 .setImageRequest(request)

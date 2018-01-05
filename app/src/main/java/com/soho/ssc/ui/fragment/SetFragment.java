@@ -2,6 +2,7 @@ package com.soho.ssc.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,16 +17,16 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.soho.ssc.R;
-import com.soho.ssc.model.ResultBean;
+import com.soho.ssc.model.VideoBean;
 import com.soho.ssc.ui.activities.SetActivity;
+import com.soho.ssc.ui.activities.VideoDescActivity;
+import com.soho.ssc.ui.adapter.common.HeaderViewRecyclerAdapter;
 import com.soho.ssc.ui.adapter.common.RecyclerCommonAdapter;
 import com.soho.ssc.ui.adapter.common.RecyclerViewHolder;
-import com.soho.ssc.utils.Constants;
 import com.soho.ssc.utils.L;
 import com.soho.ssc.utils.OkHttpUtil;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,8 +49,12 @@ public class SetFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     private View rootView;
     private Context mContext;
     private LinearLayoutManager layoutManager;
-    private RecyclerCommonAdapter<ResultBean.DataBean> adapter;
-    private ArrayList<ResultBean.DataBean> lotteryList = new ArrayList<>();
+    private RecyclerCommonAdapter<VideoBean.DataBean.EntitiesBean> adapter;
+    private ArrayList<VideoBean.DataBean.EntitiesBean> videoList = new ArrayList<>();
+    private int page = 1;
+    private int pageno = 10;
+    private HeaderViewRecyclerAdapter mAdapter;
+    private View loadMoreView;
 
     @Override
     public void onAttach(Context context) {
@@ -61,7 +66,7 @@ public class SetFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (null == rootView) {
-            rootView = inflater.inflate(R.layout.fragment_tab_home, container, false);
+            rootView = inflater.inflate(R.layout.fragment_find, container, false);
         }
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -71,12 +76,12 @@ public class SetFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-        initData();
+        initData(page);
     }
 
     private void initView() {
         setImg.setVisibility(View.VISIBLE);
-        titleTv.setText("排列5开奖公告");
+        titleTv.setText("精选视频");
         refreshLayout.setOnRefreshListener(this);
         refreshLayout.setColorSchemeResources(
                 android.R.color.holo_red_light,
@@ -89,51 +94,66 @@ public class SetFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         layoutManager = new LinearLayoutManager(mContext);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerCommonAdapter<ResultBean.DataBean>(mContext, lotteryList, R.layout.item_home) {
-            public List<Integer> codeList = new ArrayList<>();
-            public RecyclerCommonAdapter codeAdapter;
-            public RecyclerView codeRecyclerView;
-
+        adapter = new RecyclerCommonAdapter<VideoBean.DataBean.EntitiesBean>(mContext, videoList, R.layout.item_fragment_video) {
             @Override
-            public void convert(RecyclerViewHolder holder, ResultBean.DataBean item, int position) {
-                holder.getView(R.id.img_flag).setVisibility(View.VISIBLE);
-                holder.setText(R.id.text_name, "排列5");
-                holder.setText(R.id.tv_time, "第" + item.getExpect() + "期开奖结果");
-                holder.setText(R.id.tv_date, "开奖时间：" + item.getOpentime());
-                holder.setImageResource(R.id.img_flag, R.drawable.lottery_pailie5);
-
-
-                String data = lotteryList.get(position).getOpencode();
-                String[] arr = data.split(",");
-                codeList.clear();
-                for (int i = 0; i < arr.length; i++) {
-                    codeList.add(Integer.parseInt(arr[i]));
-                }
-                codeRecyclerView = (RecyclerView) holder.getView(R.id.recycler_num);
-                LinearLayoutManager subLayoutManager = new LinearLayoutManager(mContext);
-                subLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                codeRecyclerView.setLayoutManager(subLayoutManager);
-                codeAdapter = new RecyclerCommonAdapter<Integer>(mContext, codeList, R.layout.item_code) {
-                    @Override
-                    public void convert(RecyclerViewHolder holder, Integer item, int position) {
-                        holder.setText(R.id.tv_code, String.valueOf(item));
-                    }
-                };
-                codeRecyclerView.setAdapter(codeAdapter);
+            public void convert(RecyclerViewHolder holder, VideoBean.DataBean.EntitiesBean item, int position) {
+                holder.setVideoFrescoImg(R.id.video_img, Uri.parse(item.getPoster()));
+                holder.setText(R.id.video_name_tv,item.getName());
+                holder.setText(R.id.video_time_tv,item.getPlayed_count() + "观看");
             }
         };
-        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new RecyclerCommonAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                startActivity(new Intent(mContext,VideoDescActivity.class)
+                        .putExtra("name",videoList.get(position).getName())
+                        .putExtra("url",videoList.get(position).getUrl())
+                        .putExtra("photo_url",videoList.get(position).getPoster()));
+            }
+        });
+        mAdapter = new HeaderViewRecyclerAdapter(adapter);
+        createLoadMoreView();
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            public int lastVisibleItem;
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mAdapter.getItemCount() && videoList.size() > 9) {
+                    page++;
+                    initData(page);
+                    loadMoreView.setVisibility(View.VISIBLE);
+                }
+
+            }
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (layoutManager instanceof LinearLayoutManager) {
+                    lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                }
+            }
+        });
     }
 
-    private void initData() {
-        new OkHttpUtil().get(Constants.BASE_URL + "pl5-" + 20 + ".json", new OkHttpUtil.HttpCallback() {
+    private void createLoadMoreView() {
+        if(mContext == null){
+            return;
+        }
+        loadMoreView = LayoutInflater.from(mContext).inflate(R.layout.layout_load_more, recyclerView, false);
+        mAdapter.addFooterView(loadMoreView);
+        loadMoreView.setVisibility(View.GONE);
+    }
+
+    private void initData(int page) {
+        new OkHttpUtil().get("https://api.staging.change.so/v2/feeds/home" + "?page=" + page + "&&per_page=" + pageno + "&&category=" + "tuijian", new OkHttpUtil.HttpCallback() {
             @Override
             public void onSuccess(String data) {
                 refreshLayout.setRefreshing(false);
                 L.e("load data:" + data);
-                ResultBean bean = new Gson().fromJson(data, ResultBean.class);
-                if (bean != null) {
-                    lotteryList.addAll(bean.getData());
+                VideoBean videoBean = new Gson().fromJson(data,VideoBean.class);
+                if(videoBean != null){
+                    videoList.addAll(videoBean.getData().getEntities());
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -151,7 +171,8 @@ public class SetFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         refreshLayout.postDelayed(new Runnable() {
             @Override
             public void run() {
-                initData();
+                page = 1;
+                initData(page);
             }
         }, 2000);
     }

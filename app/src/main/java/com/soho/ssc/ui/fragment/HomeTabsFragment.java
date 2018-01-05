@@ -2,7 +2,6 @@ package com.soho.ssc.ui.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,11 +15,12 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.soho.ssc.R;
-import com.soho.ssc.model.NewsBean;
 import com.soho.ssc.model.ResultBean;
+import com.soho.ssc.ui.activities.home.FcActivity;
 import com.soho.ssc.ui.adapter.common.RecyclerCommonAdapter;
 import com.soho.ssc.ui.adapter.common.RecyclerViewHolder;
-import com.soho.ssc.ui.fragment.find.NewDescActivity;
+import com.soho.ssc.utils.Constants;
+import com.soho.ssc.utils.L;
 import com.soho.ssc.utils.OkHttpUtil;
 import com.soho.ssc.utils.SpUtil;
 
@@ -29,25 +29,29 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+
 
 /**
  * @author dell
  * @data 2017/12/31.
  */
 
-public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    private Activity mContext;
-    private View rootView;
+public class HomeTabsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.title_tv)
     TextView titleTv;
     @BindView(R.id.recycler_recommend)
     RecyclerView recyclerView;
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout refreshLayout;
+    private View rootView;
+    private Activity mContext;
     private LinearLayoutManager layoutManager;
-    private List<NewsBean.ResultBean> newsList = new ArrayList<>();
-    private RecyclerCommonAdapter<NewsBean.ResultBean> adapter;
-    private NewsBean newsBean;
+
+    List<ResultBean.DataBean> list = new ArrayList<>();
+    private RecyclerCommonAdapter<ResultBean.DataBean> adapter;
+    private List<Integer> codeList = new ArrayList<>();
 
     @Override
     public void onAttach(Activity activity) {
@@ -59,7 +63,7 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (null == rootView) {
-            rootView = inflater.inflate(R.layout.fragment_find, container, false);
+            rootView = inflater.inflate(R.layout.fragment_tab_home, container, false);
         }
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -73,7 +77,7 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void initView() {
-        titleTv.setText("热点新闻");
+        titleTv.setText("福彩3D开奖公告");
         refreshLayout.setOnRefreshListener(this);
         refreshLayout.setColorSchemeResources(
                 android.R.color.holo_red_light,
@@ -86,36 +90,59 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         layoutManager = new LinearLayoutManager(mContext);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerCommonAdapter<NewsBean.ResultBean>(mContext, newsList, R.layout.item_news) {
+        adapter = new RecyclerCommonAdapter<ResultBean.DataBean>(mContext,list,R.layout.item_home) {
+            public RecyclerCommonAdapter codeAdapter;
+            public RecyclerView codeRecyclerView;
+
             @Override
-            public void convert(RecyclerViewHolder holder, final NewsBean.ResultBean item, int position) {
-                holder.setText(R.id.tv_title,item.getTitle());
-                holder.setText(R.id.tv_hot,"热度："+item.getReplies_count()+"");
-                holder.setNewsFrescoImg(R.id.news_img, Uri.parse(item.getImage_info().getUrl()));
+            public void convert(RecyclerViewHolder holder, ResultBean.DataBean item, int position) {
+                holder.getView(R.id.img_flag).setVisibility(View.VISIBLE);
+                holder.setText(R.id.text_name,"福彩3D");
+                holder.setText(R.id.tv_time,"第" + item.getExpect() + "期开奖结果");
+                holder.setText(R.id.tv_date,"开奖时间："+item.getOpentime());
+
+                String data = list.get(position).getOpencode();
+                String[] arr = data.split(",");
+                codeList.clear();
+                for (int i = 0; i < arr.length; i++){
+                    codeList.add(Integer.parseInt(arr[i]));
+                }
+                codeRecyclerView = (RecyclerView)holder.getView(R.id.recycler_num);
+                LinearLayoutManager subLayoutManager = new LinearLayoutManager(mContext);
+                subLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                codeRecyclerView.setLayoutManager(subLayoutManager);
+                codeAdapter = new RecyclerCommonAdapter<Integer>(mContext, codeList, R.layout.item_code) {
+                    @Override
+                    public void convert(RecyclerViewHolder holder, Integer item, int position) {
+                        holder.setText(R.id.tv_code,String.valueOf(item));
+                    }
+                };
+                codeRecyclerView.setAdapter(codeAdapter);
             }
         };
         adapter.setOnItemClickListener(new RecyclerCommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                startActivity(new Intent(mContext,NewDescActivity.class)
-                        .putExtra("url",newsList.get(position).getUrl())
-                        .putExtra("img_url",newsList.get(position).getImage_info().getUrl()));
+                startActivity(new Intent(mContext,FcActivity.class)
+                        .putExtra("title","福彩3D")
+                        .putExtra("time",list.get(position).getExpect())
+                        .putExtra("date",list.get(position).getOpentime())
+                        .putExtra("flag",0));
             }
         });
         recyclerView.setAdapter(adapter);
     }
-
     private void initData() {
-        new OkHttpUtil().get("https://www.guokr.com/apis/minisite/article.json?retrieve_type=by_channel&channel_key=hot", new OkHttpUtil.HttpCallback() {
+        new OkHttpUtil().get("http://f.apiplus.net/fc3d-20.json", new OkHttpUtil.HttpCallback() {
             @Override
             public void onSuccess(String data) {
                 refreshLayout.setRefreshing(false);
-                newsBean = new Gson().fromJson(data,NewsBean.class);
-                newsList.clear();
-                if(newsBean != null && newsBean.getResult().size() > 0){
-                    newsList.addAll(newsBean.getResult());
+                L.e("load data:" + data);
+                ResultBean bean = new Gson().fromJson(data,ResultBean.class);
+                if(bean != null){
+                    SpUtil.save("tab","home_bean",bean);     //缓存bean对象
+                    list.addAll(bean.getData());
                     adapter.notifyDataSetChanged();
-                    SpUtil.save("tab","find_list",newsBean);
                 }
             }
 
@@ -125,6 +152,10 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 refreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    @OnClick(R.id.back)
+    public void onClick() {
     }
 
     @Override

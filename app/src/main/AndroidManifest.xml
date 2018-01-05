@@ -40,13 +40,19 @@
         </activity>
 
         <activity android:name=".ui.activities.MainActivity"
-            android:launchMode="singleTask"
             />
         <activity android:name=".ui.activities.WebViewActivity"/>
         <activity android:name=".ui.activities.DetailActivity"/>
         <activity android:name=".ui.activities.SetActivity"/>
+        <activity android:name=".ui.activities.home.FcActivity"/>
+        <activity android:name=".ui.fragment.find.NewDescActivity"/>
+        <activity android:name=".ui.activities.VideoDescActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent"/>
+
         <!--<service android:name="receive.MyReceiver"-->
-            <!--android:process=":push"/>-->
+        <!--android:process=":push"/>-->
         <receiver android:name="receive.NotificationReceiver"/>
         <receiver android:name="receive.ShowNotificationReceiver"/>
 

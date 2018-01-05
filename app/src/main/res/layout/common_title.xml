@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/back"
         style="@style/style_common_click_effect"
-        android:src="@drawable/title_back"
+        android:src="@drawable/back_white"
         android:padding="15dp"
         android:scaleType="center"
         android:layout_centerVertical="true"

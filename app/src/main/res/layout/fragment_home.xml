@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="开奖公告"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:background="#ff4129"/>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/toolbar_tab"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:background="#ffffff"
+        android:fillViewport="false"
+        app:layout_scrollFlags="scroll"
+        app:tabIndicatorColor="#000"
+        app:tabIndicatorHeight="2.0dp"
+        app:tabSelectedTextColor="#000"
+        app:tabTextColor="#8c8c8c"
+       >
+        <android.support.design.widget.TabItem
+            style="@style/style_common_width_height_mm"
+            android:text="福彩3D"
+            />
+        <android.support.design.widget.TabItem
+            style="@style/style_common_width_height_mm"
+            android:text="排列5"/>
+</android.support.design.widget.TabLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        style="@style/style_common_width_height_mm"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
+</LinearLayout>

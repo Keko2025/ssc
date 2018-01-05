@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/common_title"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="往期开奖公告"
+        android:textColor="#666666"
+        android:padding="15dp"
+        android:textSize="14sp"/>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        style="@style/style_common_width_height_mw"
+        android:layout_below="@+id/line"
+        android:layout_above="@+id/bottom_view_comment"
+        >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle"
+            style="@style/style_common_width_height_mw"
+            android:scrollbars="vertical"
+            />
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>
