@@ -60,8 +60,9 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     private void initView() {
         mMoreScale = (TextView) findViewById(R.id.moreScale);
         mSwitchSize = (TextView) findViewById(R.id.switchSize);
-
-        GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_DEFAULT);
+        if(mIfCurrentIsFullscreen){
+            GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL);
+        }
         //切换清晰度
         mMoreScale.setOnClickListener(new View.OnClickListener() {
             @Override

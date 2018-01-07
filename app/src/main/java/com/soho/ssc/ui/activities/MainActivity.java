@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements Frag2ActivImp {
     @BindView(android.R.id.tabhost)
     FragmentTabHost tabhost;
 
-    private String texts[] = {"首页", "发现", "我的"};
+    private String texts[] = {"首页", "发现", "精选"};
     private int imageButton[] = { R.drawable.tab_main, R.drawable.tab_find, R.drawable.tab_mine };
     private Class fragmentArray[] = { FindFragment.class,HomeFragment.class, SetFragment.class };
 

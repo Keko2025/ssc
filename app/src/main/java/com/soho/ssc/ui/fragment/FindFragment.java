@@ -1,28 +1,22 @@
 package com.soho.ssc.ui.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.soho.ssc.R;
-import com.soho.ssc.model.NewsBean;
-import com.soho.ssc.model.ResultBean;
-import com.soho.ssc.ui.adapter.common.RecyclerCommonAdapter;
-import com.soho.ssc.ui.adapter.common.RecyclerViewHolder;
-import com.soho.ssc.ui.fragment.find.NewDescActivity;
-import com.soho.ssc.utils.OkHttpUtil;
-import com.soho.ssc.utils.SpUtil;
+import com.soho.ssc.ui.fragment.find.FroFragment;
+import com.soho.ssc.ui.fragment.find.NewsFragment;
+import com.soho.ssc.ui.fragment.find.TecFragment;
+import com.soho.ssc.utils.TabUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,19 +29,22 @@ import butterknife.ButterKnife;
  * @data 2017/12/31.
  */
 
-public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    private Activity mContext;
-    private View rootView;
+public class FindFragment extends Fragment {
+    @BindView(R.id.toolbar_tab)
+    TabLayout toolbarTab;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
     @BindView(R.id.title_tv)
     TextView titleTv;
-    @BindView(R.id.recycler_recommend)
-    RecyclerView recyclerView;
-    @BindView(R.id.refresh_layout)
-    SwipeRefreshLayout refreshLayout;
-    private LinearLayoutManager layoutManager;
-    private List<NewsBean.ResultBean> newsList = new ArrayList<>();
-    private RecyclerCommonAdapter<NewsBean.ResultBean> adapter;
-    private NewsBean newsBean;
+    private View rootView;
+    private Activity mContext;
+    private List<Fragment> list = new ArrayList<Fragment>();
+    private NewsFragment newsFragment;
+    private TecFragment tecFragment;
+    private FroFragment froFragment;
+    private FragmentPagerAdapter viewPageAdapter;
+    private List<String> titles = new ArrayList<>();
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -59,7 +56,7 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (null == rootView) {
-            rootView = inflater.inflate(R.layout.fragment_find, container, false);
+            rootView = inflater.inflate(R.layout.fragment_find_tab, container, false);
         }
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -68,72 +65,48 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initView();
         initData();
+        titleTv.setText("热点新闻");
     }
 
-    private void initView() {
-        titleTv.setText("热点新闻");
-        refreshLayout.setOnRefreshListener(this);
-        refreshLayout.setColorSchemeResources(
-                android.R.color.holo_red_light,
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light);
-        refreshLayout.setRefreshing(true);
-
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(mContext);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerCommonAdapter<NewsBean.ResultBean>(mContext, newsList, R.layout.item_news) {
+    private void initTab() {
+        toolbarTab.post(new Runnable() {
             @Override
-            public void convert(RecyclerViewHolder holder, final NewsBean.ResultBean item, int position) {
-                holder.setText(R.id.tv_title,item.getTitle());
-                holder.setText(R.id.tv_hot,"热度："+item.getReplies_count()+"");
-                holder.setNewsFrescoImg(R.id.news_img, Uri.parse(item.getImage_info().getUrl()));
-            }
-        };
-        adapter.setOnItemClickListener(new RecyclerCommonAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                startActivity(new Intent(mContext,NewDescActivity.class)
-                        .putExtra("url",newsList.get(position).getUrl())
-                        .putExtra("img_url",newsList.get(position).getImage_info().getUrl()));
+            public void run() {
+                TabUtil.setIndicator(toolbarTab, 30, 30);
             }
         });
-        recyclerView.setAdapter(adapter);
     }
 
     private void initData() {
-        new OkHttpUtil().get("https://www.guokr.com/apis/minisite/article.json?retrieve_type=by_channel&channel_key=hot", new OkHttpUtil.HttpCallback() {
+        initTab();
+        if(newsFragment == null){
+            newsFragment = new NewsFragment();
+        }
+        if(tecFragment == null){
+            tecFragment = new TecFragment();
+        }
+        if(froFragment == null){
+            froFragment = new FroFragment();
+        }
+        list.add(froFragment);
+        list.add(tecFragment);
+        list.add(newsFragment);
+
+        viewPageAdapter = new FragmentPagerAdapter(this.getChildFragmentManager()) {
             @Override
-            public void onSuccess(String data) {
-                refreshLayout.setRefreshing(false);
-                newsBean = new Gson().fromJson(data,NewsBean.class);
-                newsList.clear();
-                if(newsBean != null && newsBean.getResult().size() > 0){
-                    newsList.addAll(newsBean.getResult());
-                    adapter.notifyDataSetChanged();
-                    SpUtil.save("tab","find_list",newsBean);
-                }
+            public int getCount() {
+                return list.size();
             }
 
             @Override
-            public void onError(String msg) {
-                super.onError(msg);
-                refreshLayout.setRefreshing(false);
+            public Fragment getItem(int position) {
+                return list.get(position);
             }
-        });
-    }
-
-    @Override
-    public void onRefresh() {
-        refreshLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                initData();
-            }
-        }, 2000);
+        };
+        viewPager.setOffscreenPageLimit(2);
+        viewPager.setAdapter(viewPageAdapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(toolbarTab));
+        toolbarTab.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
     }
 }

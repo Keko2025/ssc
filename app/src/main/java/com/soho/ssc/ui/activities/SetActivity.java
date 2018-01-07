@@ -24,7 +24,8 @@ public class SetActivity extends AppCompatActivity {
     TextView titleTv;
     @BindView(R.id.tv_cache)
     TextView tvCache;
-
+    @BindView(R.id.back)
+    ImageView titleBack;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +34,7 @@ public class SetActivity extends AppCompatActivity {
 
         setCacheData();
         titleTv.setText("设置");
+        titleBack.setVisibility(View.VISIBLE);
     }
     /**
      * 计算图片缓存大小给控件赋值
