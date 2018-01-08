@@ -19,7 +19,6 @@ import android.widget.RelativeLayout;
 import com.google.gson.Gson;
 import com.soho.ssc.R;
 import com.soho.ssc.model.DataBean;
-import com.soho.ssc.model.ResultBean;
 import com.soho.ssc.model.SscBean;
 import com.soho.ssc.utils.L;
 import com.soho.ssc.utils.OkHttpUtil;
@@ -28,8 +27,6 @@ import java.lang.reflect.Method;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.R.attr.data;
 
 
 /**
@@ -79,7 +76,7 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void onError(String msg) {
                         super.onError(msg);
-                        L.e("data:"+data);
+                        L.e("data:"+msg);
                     }
                 });
     }
