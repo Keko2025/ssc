@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:id="@+id/common_title"
-    android:background="#ff4129">
+    android:background="#fff">
     <ImageView
         android:id="@+id/back"
         style="@style/style_common_click_effect"
-        android:src="@drawable/back_white"
+        android:src="@drawable/title_back"
         android:padding="15dp"
         android:scaleType="center"
         android:layout_centerVertical="true"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:textSize="16sp"
-        android:textColor="#fff"
+        android:textColor="#000000"
         android:singleLine="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>

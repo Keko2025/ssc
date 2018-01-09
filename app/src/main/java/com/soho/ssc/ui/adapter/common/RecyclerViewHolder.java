@@ -116,7 +116,7 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
     public RecyclerViewHolder setNewsFrescoImg(int viewId, Uri uri){
         SimpleDraweeView simpleDraweeView = getView(viewId);
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(new ResizeOptions(DisplayUtil.dp2px(mContext.getApplicationContext(),120),DisplayUtil.dp2px(mContext.getApplicationContext(),70)))
+                .setResizeOptions(new ResizeOptions(DisplayUtil.dp2px(mContext.getApplicationContext(),160),DisplayUtil.dp2px(mContext.getApplicationContext(),90)))
                 .build();
         DraweeController controller = Fresco.newDraweeControllerBuilder()
                 .setImageRequest(request)

@@ -16,7 +16,9 @@ import com.soho.ssc.R;
 import com.soho.ssc.ui.fragment.find.FroFragment;
 import com.soho.ssc.ui.fragment.find.NewsFragment;
 import com.soho.ssc.ui.fragment.find.TecFragment;
-import com.soho.ssc.utils.TabUtil;
+import com.soho.ssc.ui.fragment.home.FactFragment;
+import com.soho.ssc.ui.fragment.home.ReviewFragment;
+import com.soho.ssc.ui.fragment.home.VisualFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +44,12 @@ public class FindFragment extends Fragment {
     private NewsFragment newsFragment;
     private TecFragment tecFragment;
     private FroFragment froFragment;
+    private FactFragment factFragment;
+    private VisualFragment visualFragment;
+    private ReviewFragment reviewFragment;
+
     private FragmentPagerAdapter viewPageAdapter;
     private List<String> titles = new ArrayList<>();
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -69,17 +74,7 @@ public class FindFragment extends Fragment {
         titleTv.setText("热点新闻");
     }
 
-    private void initTab() {
-        toolbarTab.post(new Runnable() {
-            @Override
-            public void run() {
-                TabUtil.setIndicator(toolbarTab, 30, 30);
-            }
-        });
-    }
-
     private void initData() {
-        initTab();
         if(newsFragment == null){
             newsFragment = new NewsFragment();
         }
@@ -89,9 +84,22 @@ public class FindFragment extends Fragment {
         if(froFragment == null){
             froFragment = new FroFragment();
         }
+        if(visualFragment == null){
+            visualFragment = new VisualFragment();
+        }
+        if(factFragment == null){
+            factFragment = new FactFragment();
+        }
+        if(reviewFragment == null){
+            reviewFragment = new ReviewFragment();
+        }
+
         list.add(froFragment);
         list.add(tecFragment);
         list.add(newsFragment);
+        list.add(visualFragment);
+        list.add(factFragment);
+        list.add(reviewFragment);
 
         viewPageAdapter = new FragmentPagerAdapter(this.getChildFragmentManager()) {
             @Override

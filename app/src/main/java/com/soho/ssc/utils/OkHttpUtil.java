@@ -67,6 +67,7 @@ public class OkHttpUtil {
                     .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
                     .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
                     .readTimeout(TIMEOUT, TimeUnit.SECONDS)
+//                    .addInterceptor(new MyInterceptors())
                     .sslSocketFactory(createSSLSocketFactory())  //https
                     .hostnameVerifier(new TrustAllHostnameVerifier()) //https
                     .build();

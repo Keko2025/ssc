@@ -50,6 +50,10 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent"/>
+        <activity android:name=".ui.activities.VideoDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"/>
+
 
         <!--<service android:name="receive.MyReceiver"-->
         <!--android:process=":push"/>-->
@@ -73,6 +77,10 @@
                 android:resource="@xml/provider_paths"
                 tools:replace="name,resource"/>
         </provider>
+
+        <meta-data
+            android:name="UMENG_APPKEY" android:value="5a542e5ff29d9839a70000ec" >
+        </meta-data>
 
     </application>
 

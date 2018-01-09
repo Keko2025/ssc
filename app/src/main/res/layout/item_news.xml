@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="100dp"
     android:background="#fff"
-    android:layout_marginTop="10dp"
-    >
+    android:layout_marginTop="10dp">
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="为手机限速，苹果真的是邪恶巨头吗？"
-            android:textColor="#666666"
+            android:textColor="#222222"
             android:textSize="16sp"
             android:padding="15dp"
             />
@@ -33,11 +34,12 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/news_img"
-        android:layout_width="120dp"
+        android:layout_height="80dp"
+        fresco:viewAspectRatio="1.78"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="15dp"
         android:layout_gravity="center"
-        android:layout_height="70dp" />
+        android:layout_width="142dp" />
 
 </RelativeLayout>

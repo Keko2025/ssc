@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">时时彩计划平台</string>
+
+    <string name="collection">收藏</string>
+    <string name="share">分享</string>
+    <string name="notify_remove_from_collection">成功从收藏移除!</string>
+    <string name="notify_add_to_collection">成功添加到收藏</string>
+
 </resources>

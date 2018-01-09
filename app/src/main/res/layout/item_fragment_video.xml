@@ -23,6 +23,33 @@
             android:src="@drawable/play"
             android:scaleType="center"
             android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/video_name_tv"
+            style="@style/style_common_width_height_mw"
+            android:paddingLeft="14dp"
+            android:paddingRight="20dp"
+            android:padding="10dp"
+            android:text="不想练大"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:maxLines="2"
+            android:lineSpacingMultiplier="1.2"
+            android:lineSpacingExtra="1.5dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="09:25"
+            android:textColor="#fff"
+            android:textSize="14sp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="15dp"
+            android:background="@drawable/bg_video_title"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -31,33 +58,17 @@
         android:orientation="vertical"
         android:layout_below="@+id/id_top_tab"
         >
-
-        <TextView
-            android:id="@+id/video_name_tv"
-            style="@style/style_common_width_height_ww"
-            android:layout_marginLeft="14dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="1dp"
-            android:text=""
-            android:textStyle="bold"
-            android:textColor="#000"
-            android:textSize="14sp"
-            android:maxLines="2"
-            android:lineSpacingMultiplier="1.2"
-            android:lineSpacingExtra="1dp"/>
-
         <TextView
             android:id="@+id/video_time_tv"
             style="@style/style_common_width_height_ww"
-            android:layout_below="@+id/video_name_tv"
             android:layout_marginLeft="14dp"
             android:layout_marginBottom="1dp"
-            android:layout_marginTop="@dimen/common_5"
+            android:layout_margin="@dimen/common_10"
             android:textColor="#585858"
             android:textSize="11sp"
-            android:text=""
+            android:text="42033次播放 . 30分钟前"
             />
-        <!--42033次播放 . 30分钟前-->
+        <!---->
     </RelativeLayout>
 
 </RelativeLayout>

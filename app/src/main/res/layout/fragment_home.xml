@@ -11,8 +11,11 @@
         android:text="开奖公告"
         android:textSize="15dp"
         android:gravity="center"
-        android:textColor="#fff"
-        android:background="#ff4129"/>
+        android:textColor="#000000"
+        android:background="#fff"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
     <android.support.design.widget.TabLayout
         android:id="@+id/toolbar_tab"
         android:layout_width="match_parent"
@@ -21,18 +24,18 @@
         android:background="#ffffff"
         android:fillViewport="false"
         app:layout_scrollFlags="scroll"
-        app:tabIndicatorColor="#000"
+        app:tabIndicatorColor="#ff4129"
         app:tabIndicatorHeight="2.0dp"
-        app:tabSelectedTextColor="#000"
+        app:tabSelectedTextColor="#ff4129"
         app:tabTextColor="#8c8c8c"
         >
         <android.support.design.widget.TabItem
             style="@style/style_common_width_height_mm"
-            android:text="热点"
+            android:text="福彩3d"
             />
         <android.support.design.widget.TabItem
             style="@style/style_common_width_height_mm"
-            android:text="前沿"/>
+            android:text="排列5"/>
     </android.support.design.widget.TabLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
