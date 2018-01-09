@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/id_framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        >
+        <com.soho.ssc.ui.view.LandLayoutVideo
+            android:id="@+id/detail_player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </FrameLayout>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/toolbar_tab"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:layout_gravity="center"
+        android:background="#ffffff"
+        android:fillViewport="false"
+        app:layout_scrollFlags="scroll"
+        app:tabIndicatorColor="#000"
+        app:tabIndicatorHeight="1.0dp"
+        app:tabSelectedTextColor="#000"
+        app:tabTextColor="#8c8c8c"
+        >
+    </android.support.design.widget.TabLayout>
+</LinearLayout>
