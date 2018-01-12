@@ -15,6 +15,7 @@ import com.soho.ssc.R;
 import com.soho.ssc.ui.fragment.FindFragment;
 import com.soho.ssc.ui.fragment.HomeFragment;
 import com.soho.ssc.ui.fragment.VideoFragment;
+import com.soho.ssc.ui.fragment.shop.ShopFragment;
 import com.soho.ssc.ui.impl.Frag2ActivImp;
 import com.soho.ssc.ui.view.FragmentTabHost;
 import com.soho.ssc.utils.L;
@@ -26,9 +27,9 @@ public class MainActivity extends AppCompatActivity implements Frag2ActivImp {
     @BindView(android.R.id.tabhost)
     FragmentTabHost tabhost;
 
-    private String texts[] = {"首页", "发现", "精选"};
-    private int imageButton[] = { R.drawable.tab_main, R.drawable.tab_find, R.drawable.tab_mine };
-    private Class fragmentArray[] = { FindFragment.class, VideoFragment.class,HomeFragment.class };
+    private String texts[] = {"首页", "发现","商城", "精选"};
+    private int imageButton[] = { R.drawable.tab_main, R.drawable.tab_find, R.drawable.tab_shop,R.drawable.tab_mine };
+    private Class fragmentArray[] = { FindFragment.class, VideoFragment.class,ShopFragment.class,HomeFragment.class };
 
     private int previous = 0;
     private int current = 0;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements Frag2ActivImp {
     private VideoFragment videoFragment;
     long waitTime = 2000;
     long touchTime = 0;
+    private ShopFragment shopFragment;
 
     @Override
     public void onAttachFragment(Fragment fragment) {
@@ -46,8 +48,10 @@ public class MainActivity extends AppCompatActivity implements Frag2ActivImp {
             homgFragment = (HomeFragment) fragment;
         }else if (fragment instanceof VideoFragment){
             videoFragment = (VideoFragment) fragment;
-        }if (fragment instanceof FindFragment){
+        }else if (fragment instanceof FindFragment){
             findFragment = (FindFragment) fragment;
+        }else if (fragment instanceof ShopFragment){
+            shopFragment = (ShopFragment) fragment;
         }
     }
 
