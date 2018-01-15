@@ -6,4 +6,5 @@ package com.soho.ssc.ui.view;
  */
 
 public class HeaderView {
+
 }
