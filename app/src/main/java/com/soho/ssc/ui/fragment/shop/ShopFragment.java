@@ -43,7 +43,5 @@ public class ShopFragment extends Fragment {
         initData();
     }
 
-    private void initData() {
-
-    }
+    private void initData() {}
 }
